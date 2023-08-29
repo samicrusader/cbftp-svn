@@ -1,0 +1,1 @@
+[![build on "ubuntu-latest"](https://github.com/cbftp/cbftp-svn/actions/workflows/cmake-multi-platform.yml/badge.svg?branch=master)](https://github.com/cbftp/cbftp-svn/actions/workflows/cmake-multi-platform.yml)

@@ -31,6 +31,6 @@ jobs:
         sudo apt-get --yes --no-install-recommends install ${{ env.CBFTP_DEPENDENCIES_LINUX }}
     
     - name: Build and run tests
-          CC: ${{ matrix.config.cc }}
+          CC: ${{ matrix.config.gcc }}
       
   

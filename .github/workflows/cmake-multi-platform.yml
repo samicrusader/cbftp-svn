@@ -1,4 +1,4 @@
-name: CMake on *nix and *BSD
+name: build on "ubuntu-latest"
 
 on:
   push:

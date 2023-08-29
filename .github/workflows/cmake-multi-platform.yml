@@ -23,7 +23,7 @@ jobs:
         config:
           - { name: "gcc", cc: "gcc", cxx: "g++", buildargs: "" }
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     
     - name: Install dependencies
       run: |

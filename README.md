@@ -1,17 +1,18 @@
 [![build on "ubuntu-latest"](https://github.com/cbftp/cbftp-svn/actions/workflows/cmake-multi-platform.yml/badge.svg?branch=master)](https://github.com/cbftp/cbftp-svn/actions/workflows/cmake-multi-platform.yml)
 
+```
      _   ___ _
  ___| |_|  _| |_ ___
 |  _| . |  _|  _| . |
 |___|___|_| |_| |  _|
                 |_|
-
-Cbftp is an advanced multi-purpose FTP/FXP client that focuses on efficient
+```
+**Cbftp** is an advanced multi-purpose FTP/FXP client that focuses on efficient
 large-scale data spreading, while also supporting most regular FTP/FXP use
 cases in a modern way. It runs in a terminal and provides a semi-graphical
 user interface through ncurses.
 
-MAJOR FEATURES
+# MAJOR FEATURES
 
 - Spread jobs for efficient many-to-many FTP server data spreading through FXP
 - Transfer jobs for regular file transfer needs: FXP, Upload, Download
@@ -28,7 +29,7 @@ MAJOR FEATURES
 - File viewing through external applications when running in a local terminal
 - SOCKS5 proxy support
 
-RUNNING NATIVELY
+# RUNNING NATIVELY
 
 Linux build dependencies: make g++ libssl-dev libncursesw5-dev
 BSD build dependencies: gmake gcc11-devel openssl ncurses
@@ -50,7 +51,7 @@ will be created the first time cbftp is started. It is located at
 be enabled through the global settings, and your data file will then be
 encrypted with aes-256-cbc.
 
-RUNNING IN DOCKER
+# RUNNING IN DOCKER
 
 As an alternative, it is also possible to build and run cbftp through docker.
 By default, the data dir at ~/.cbftp is mounted into the docker image
@@ -60,7 +61,7 @@ Procedure: run 'make docker-build' in the cbftp root.
 When the build procedure has completed, you can start cbftp by running
 'make docker-run'.
 
-GETTING STARTED
+# GETTING STARTED
 
 After starting cbftp (and possibly entering your passphrase), you will end up
 on the main ui screen of the client. This is where your FTP sites will be
@@ -71,14 +72,14 @@ available key bindings at any given time.
 The first thing you will want to do here is probably to add a site, so
 press A.
 
-THE UI
+# THE UI
 
 The cbftp user interface is based on a bunch of various views - main screen,
 edit site screen, browse screen, etc. The available views can be considered
 as a stack - after you've entered a new view, leaving it will normally take
 you back to where you came from.
 
-BROWSING
+# BROWSING
 
 After adding a site, you can browse it by selecting it and pressing b
 from the main screen. This will take you to a different view where the
@@ -88,7 +89,7 @@ Various features are available here, see the legend bar at the bottom.
 The browse screen is also considered a "main window" in cbftp; you can toggle
 back and forth between the browse screen and the main screen by pressing esc.
 
-STARTING A TRANSFER JOB
+# STARTING A TRANSFER JOB
 
 If you would like to transfer something, there are some ways to start a
 transfer job. The simplest way is to select an item that you wish to download
@@ -115,7 +116,7 @@ Your newly created transfer job will be visible in the main screen of cbftp.
 Transfer jobs use a single slot on each site by default; this can be modified
 in the detailed view of each transfer job.
 
-STARTING A SPREAD JOB
+# STARTING A SPREAD JOB
 
 A spread job is a larger form of transfer job that spreads an item among
 a selection of multiple sites through FXP. It is an action that does not
@@ -136,7 +137,7 @@ defined as the one where the selected item was located will be available for
 selection.
 After selecting sites, press 's' to start the spread job.
 
-SLOT HANDLING
+# SLOT HANDLING
 
 In many traditional FTP clients, a login slot is "locked" to the UI window
 that it occurs in. To use multiple slots or multiple sites, separate tabs
@@ -165,7 +166,7 @@ be used for download and upload on each site.
 The UI is not built around transfer tabs, since everything happens in the
 backend.
 
-THE TRANSFER ENGINE
+# THE TRANSFER ENGINE
 
 The transfer engine is the heart of cbftp, and it decides where, when and
 how to perform file transfers. It summarizes information about the state of
@@ -193,7 +194,7 @@ The user has partial control over the transfer patterns by limiting which
 sites that can transfer to where by using the allow/block lists available for
 each site, and also by specifying site priorities.
 
-SKIPLISTING
+# SKIPLISTING
 
 Cbftp supports advanced skiplisting of what to deny or allow, both on job
 and file basis. Skiplisting can be specified globally, per section, and/or per
@@ -249,39 +250,46 @@ with the addition of case insensitivity support via (?i).
 
 Some skiplisting examples:
 
-Skip all files ending with .jpg in the main dir of spread jobs:
+**Skip all files ending with .jpg in the main dir of spread jobs:**
+```
 [ ] *.jpg  [X]  [ ]  Deny  In spread job
-
-Skip all files ending with .jpg in all subdirs of spread jobs:
+```
+**Skip all files ending with .jpg in all subdirs of spread jobs:** 
+```
 [ ] */*.jpg  [X]  [ ]  Deny  In spread job
-
-Allow only "Sample" and "Proof" as subdirs in spread jobs:
+```
+**Allow only "Sample" and "Proof" as subdirs in spread jobs:** 
+```
 [ ] sample  [ ]  [X]  Allow  In spread job
 [ ] proof   [ ]  [X]  Allow  In spread job
 [ ] *       [ ]  [X]  Deny   In spread job
-
-Skip all spread jobs with .INTERNAL. in the name:
+```
+**Skip all spread jobs with .INTERNAL. in the name:**
+```
 [ ] *.INTERNAL.*  [ ]  [X]  Deny  Allround
-
-Only allow one nfo and sfv file within each directory:
+```
+**Only allow one nfo and sfv file within each directory:**
+```
 [ ] *.sfv  [X]  [ ]  Unique  In spread job
 [ ] *.nfo  [X]  [ ]  Unique  In spread job
-
-Skip files with spaces in the name everywhere:
+```
+**Skip files with spaces in the name everywhere:**
+```
 [ ] * *  [X]  [X]  Deny  Allround
-
-Skip files that don't belong in the directory through Similar-rules:
+```
+**Skip files that don't belong in the directory through Similar-rules:**
+```
 [ ] *.r??       [X]  [ ]  Similar  In spread job
 [ ] *.s??       [X]  [ ]  Similar  In spread job
 [ ] *.t??       [X]  [ ]  Similar  In spread job
 [ ] *.u??       [X]  [ ]  Similar  In spread job
-
-And again, note that _the first match applies_! If the skiplist does not
+```
+And again, note that **_the first match applies_!** If the skiplist does not
 behave as you expect it to do, then you will need to think through if there
 might be other rules that are matching your item too early. Use the pattern
 test feature.
 
-REMOTE COMMANDS
+# REMOTE COMMANDS
 
 Cbftp supports executing various commands remotely via two interfaces - a
 simple one-way UDP API, and an advanced HTTPS/JSON REST API.
@@ -292,9 +300,9 @@ for cbftp to accept the commands.
 In the UDP API, the password is part of the message.
 In the HTTPS/JSON REST API, the password is sent through HTTP Basic auth.
 
-Specifications for the API's are available in the API file.
+Specifications for the API's are available in the [API](https://github.com/cbftp/cbftp-svn/API) file.
 
-CONNECTION DETAILS
+# CONNECTION DETAILS
 
 To see details about what cbftp is doing on each connection to a site,
 select the site from the main screen and press enter. Here you can cycle
@@ -302,7 +310,7 @@ between the connections (if there are multiple) by using the left/right
 arrow keys. You can also force connect/disconnect specific connections
 from this view.
 
-RAW COMMANDS
+# RAW COMMANDS
 
 To send raw commands to a site, select a site on the main screen and press w.
 You will be presented with a new window where raw commands and their results
@@ -314,7 +322,7 @@ The currently selected file name can be pasted by pressing Insert.
 If you want to send raw commands on a specific connection, go to the specific
 connection (see "connection details" above) and press w there.
 
-ADD A SITE / EDIT A SITE
+# ADD A SITE / EDIT A SITE
 
 When selecting to add or edit a site, you will be presented with a bunch
 of fields where you can enter settings and parameters for your site.
@@ -412,7 +420,7 @@ Field summary:
   will result in the job operating in the specified section directory for
   each site.
 
-GLOBAL OPTIONS
+# GLOBAL OPTIONS
 
 Most global cbftp settings can be accessed by pressing G from the main screen.
 When you are done editing, press 'd' to save changes.
@@ -465,14 +473,14 @@ Field summary:
   data file.
 - Change encryption key - Set a new encryption key for the data file.
 
-TRANSFERS
+# TRANSFERS
 
 The transfers screen is available by pressing 't' from the main screen.
 this screen presents a summary of the transfers that cbftp is performing,
 and has performed previously. Select a transfer and press enter for detailed
 information about that specific transfer.
 
-GLOBAL KEY BINDINGS
+# GLOBAL KEY BINDINGS
 
 There are a few hotkeys that work from (almost) anywhere in the cbftp UI:
 \ - Toggle fullscreen mode (i.e. hide info bar + legend bar).
@@ -484,7 +492,7 @@ N - Toggle the next prepared spread job auto starter. While this function is
     might be hard to tell which items that are on the same line
 They can be configured through the global options screen.
 
-METRICS
+# METRICS
 
 In the metrics screen, there are a few metrics shown as graphs:
 - CPU load total: the total CPU usage of the cbftp process, for all CPU cores.
@@ -497,7 +505,7 @@ In the metrics screen, there are a few metrics shown as graphs:
   it results in latency when work is queued up, and slightly lower list
   frequency is often preferable over latency.
 
-SPREAD JOB STATUS
+# SPREAD JOB STATUS
 
 The spread job status screen has a table of files that might seem rather
 unintelligible at a glance.
@@ -530,7 +538,7 @@ s - you are downloading this file that someone else is uploading
 S - you are uploading and downloading this file
 p - file exists and the site is download-only in this job
 
-EXTERNAL SCRIPTS
+# EXTERNAL SCRIPTS
 
 Cbftp can be configured to execute external scripts based on certain triggers.
 There is an intended default directory for scripts at ~/.cbftp/scripts, but
@@ -553,42 +561,42 @@ An example script execution from there might have the following args:
 
 Example scripts are available in the examples directory.
 
-OTHER UI WINDOWS
+# OTHER UI WINDOWS
 
 There are various other views in the cbftp UI that are not mentioned here in
 this readme, but most are quite self-explanatory with the help of the key
 binding information found in the legend bar. You can probably figure it out.
 
-FAQ
+# FAQ
 
-Q: Why aren't my IPv6 transfers working?
-A: The site(s) or your local system may not be configured with working IPv6
+Why aren't my IPv6 transfers working?
+> The site(s) or your local system may not be configured with working IPv6
    connectivity, or the site(s) might not include an address in its EPSV
    response. Make sure that CEPR is enabled and that the site responds with an
    address in the EPSV command response, and that the address returned is
    connectable.
 
-Q: What key should I press to do xyz?
-A: A full keybind summary and configuration for the current screen is available
+What key should I press to do xyz?
+> A full keybind summary and configuration for the current screen is available
    by pressing '?'. You can also see keybinds in the legend bar at the bottom.
 
-Q: My modifications are not saved when I edit a setting/site/whatever!
-A: You usually need to press 'd' (as in Done) to save settings when editing.
+My modifications are not saved when I edit a setting/site/whatever!
+> You usually need to press 'd' (as in Done) to save settings when editing.
    Pressing c or escape normally means cancel without saving changes.
 
-Q: Can I change key bindings?
-A: Yes, press '?' to see and edit keybindings for the current screen.
+Can I change key bindings?
+> Yes, press '?' to see and edit keybindings for the current screen.
 
-Q: Some fields do not seem to be visible in the UI, or are disappearing
+Some fields do not seem to be visible in the UI, or are disappearing
    sometimes. What's going on?
-A: Cbftp adjusts the view dynamically depending on how much space is needed
+> Cbftp adjusts the view dynamically depending on how much space is needed
    to show the fields, and how much space is available. The fields shown
    are chosen based on an internal priority specification. Make your terminal
    larger!
 
-Q: What is the difference between fixed and dynamic list frequency? And what
+What is the difference between fixed and dynamic list frequency? And what
    does auto mean in this context?
-   Dynamic list frequency means that the number of times per second that cbftp
+> Dynamic list frequency means that the number of times per second that cbftp
    will refresh file lists on that site will drop voluntarily if the CPU load
    gets too high, but also that it refreshes a little faster than its fixed
    counterpart otherwise. This is in theory a good thing since lower rate is
@@ -600,9 +608,9 @@ Q: What is the difference between fixed and dynamic list frequency? And what
    than "normal". The auto mode is meant to be a balanced setting that works
    very well in most scenarios.
 
-Q: Cbftp looks weird. It shows things like ljljljljljljljljlj in various
+Cbftp looks weird. It shows things like ljljljljljljljljlj in various
    places. And/or I can't see the snake when trying to play snake. Why?
-A: Cbftp is meant to be displayed with unicode. Somewhere between cbftp and
+> Cbftp is meant to be displayed with unicode. Somewhere between cbftp and
    your terminal emulator, there is a component that strips unicode characters
    away. It could be that your system locale is not set to UTF-8, that your
    screen or tmux doesn't have UTF-8 enabled, that the ncurses build on your
@@ -610,61 +618,61 @@ A: Cbftp is meant to be displayed with unicode. Somewhere between cbftp and
    doesn't use UTF-8... Go through every step of the way and make sure that
    unicode/UTF-8 support is enabled everywhere.
 
-Q: Cbftp gets SSL/TLS error when connecting to some of my sites, what should I
+Cbftp gets SSL/TLS error when connecting to some of my sites, what should I
    do?
-A: Your system is probably using an old version of OpenSSL. Either upgrade
+> Your system is probably using an old version of OpenSSL. Either upgrade
    to a newer system version, or grab a copy of the latest OpenSSL version
    from openssl.org, compile it (./config && make) and then let cbftp know
    that it should use that by modifying the top line of Makefile.inc in the
    cbftp root dir, and then rebuild cbftp.
 
-Q: Is there some raw connection data output available anywhere?
-A: Yes, see the "connection details" section above.
+Is there some raw connection data output available anywhere?
+> Yes, see the "connection details" section above.
 
-Q: How can I see which chains cbftp is using?
-A: Cbftp doesn't really use chains in the traditional sense. See the "the
+How can I see which chains cbftp is using?
+> Cbftp doesn't really use chains in the traditional sense. See the "the
    transfer engine" section further up in this file.
    You can see current transfers and their source/destination by pressing t
    from the main screen.
 
-Q: What's the difference between 'race' and 'distribute' when starting a
+What's the difference between 'race' and 'distribute' when starting a
    spread job?
-A: The profile affects the algorithm that assigns scores to potential
+> The profile affects the algorithm that assigns scores to potential
    transfers. The 'race' profile focuses on uploading more files than other
    users everywhere, while the 'distribute' profile focuses on finishing the
    job on all sites as quickly as possible.
 
-Q: What is the block of seemingly random characters above the spread job status
+What is the block of seemingly random characters above the spread job status
    table supposed to be?
-A: Read each column from top to bottom. Cbftp attempts to describe each file
+> Read each column from top to bottom. Cbftp attempts to describe each file
    in the job by finding a sequence of 3 characters in the file name that are
    unique to that file. In many cases it will be the file suffix, or maybe
    some kind of numbering. See the "spread job status" section above.
 
-Q: Can I use multiple addresses (bouncers) to a site? How do I sort them?
-A: Yes, just add them all on the address line with spaces between. Cbftp does
+Can I use multiple addresses (bouncers) to a site? How do I sort them?
+> Yes, just add them all on the address line with spaces between. Cbftp does
    actually have a built-in sorting feature, but it's hard to spot. By default
    cbftp will attempt to connect on the first address in the list. If it does
    not manage to connect within 1 second, cbftp will attempt to connect on any
    other addresses as well. Whichever address manages to connect first will
    be stored first in the list for next time.
 
-Q: I have so many spread jobs running! Why won't they finish?
-A: Cbftp tries its best to make sure that all files are uploaded on all
+I have so many spread jobs running! Why won't they finish?
+> Cbftp tries its best to make sure that all files are uploaded on all
    involved sites. As long as any site does not have all files, cbftp will
    keep trying to upload (until a reasonable amount of attempts have been
    made). If a lot of jobs are started simultaneously and one or more sites
    can't keep up, there will be lots of running jobs.
 
-Q: I have a spread job that says 100% done but is still running, why?
-A: Cbftp needs to list the directories for a few seconds after all files
+I have a spread job that says 100% done but is still running, why?
+> Cbftp needs to list the directories for a few seconds after all files
    in a spread job have been uploaded to make sure that the directory is
    completed. If all slots for any involved site are busy doing other things,
    like transferring files in other jobs, then the job will stay running
    until that site has time to list the directory.
 
-Q: My spread jobs end in timeout instead of "done", what's wrong?
-A: Usually this happens because one or more sites cannot finish the job
+My spread jobs end in timeout instead of "done", what's wrong?
+> Usually this happens because one or more sites cannot finish the job
    due to being down, out of space, not having any transfer sources, or some
    other reason for not being able to receive files. Another common reason
    is that some unwanted files were uploaded on one or several sites during the
@@ -672,15 +680,15 @@ A: Usually this happens because one or more sites cannot finish the job
    as well before considering the job done, which may not always be possible.
    Make sure to skiplist anything unwanted!
 
-Q: One or several sites is executing STAT/LIST commands over and over, why?
-A: During a spread job, cbftp uses connections that are currently not busy
+One or several sites is executing STAT/LIST commands over and over, why?
+> During a spread job, cbftp uses connections that are currently not busy
    performing file transfers for continuously listing the spread job
    directories. This information is then used for calculating the transfer
    speeds of ongoing transfers, figuring out which files to transfer next,
    and so on. It is completely normal.
 
-Q: How do I disconnect from a site?
-A: Disconnecting is an old habit that comes from traditional clients that
+How do I disconnect from a site?
+> Disconnecting is an old habit that comes from traditional clients that
    "lock" slots to the user interface. Cbftp does not do this, and there's
    really no gain in disconnecting manually. Cbftp will disconnect by itself
    after a while. If you really want to disconnect manually you can press K
@@ -688,38 +696,38 @@ A: Disconnecting is an old habit that comes from traditional clients that
    on the site from the main screen, use the arrow keys to navigate to the
    right connection, and then press d.
 
-Q: How do I exit cbftp? Do I need to save the data file somehow?
-A: press ctrl-c. The data file is written automatically once in a while
+How do I exit cbftp? Do I need to save the data file somehow?
+> press ctrl-c. The data file is written automatically once in a while
    when cbftp is running, and upon exit.
 
-Q: Can I edit the data file manually?
-A: Yes, there are tools provided for that: bin/datafilecat and
+Can I edit the data file manually?
+> Yes, there are tools provided for that: bin/datafilecat and
    bin/datafilewrite. You can also read the file directly through OpenSSL
    commands:
    openssl enc -d -aes-256-cbc -pbkdf2 -md sha256 -in ~/.cbftp/data
 
-Q: Can I run cbftp on Windows?
-A: Yes, it should work through cygwin, but it hasn't been tested lately and
+Can I run cbftp on Windows?
+> Yes, it should work through cygwin, but it hasn't been tested lately and
    the polling mechanism available there is not as efficient.
 
-Q: Can I share this software with others?
-A: Sure, go ahead.
+Can I share this software with others?
+> Sure, go ahead.
 
-Q: Will feature X be added soon?
-A: I'm open to all kinds of suggestions, but I have very little spare time
+Will feature X be added soon?
+> I'm open to all kinds of suggestions, but I have very little spare time
    and development is therefore rather slow.
 
-Q: How do I upgrade to a newer version?
-A: Just compile and run the new version. The data file will be adjusted to
+How do I upgrade to a newer version?
+> Just compile and run the new version. The data file will be adjusted to
    the new format if necessary. But CAREFUL! Do not start an older version
    again after this, as this might result in some information being lost
    from the data file. Make a backup of the data file (~/.cbftp/data) if you
    are uncertain or want to try things out.
 
-Q: Can I make modifications to cbftp?
-A: That's why the source code is provided! If you are adding things that
+Can I make modifications to cbftp?
+> That's why the source code is provided! If you are adding things that
    would be useful for others, make sure to pass your changes back upstream,
    and they might end up in the upstream source tree eventually.
 
-Q: Where can I donate to show my support for this awesome software?
-A: No need, I mostly do this for my own amusement.
+Where can I donate to show my support for this awesome software?
+> No need, I mostly do this for my own amusement.

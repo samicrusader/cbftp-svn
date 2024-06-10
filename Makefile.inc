@@ -8,6 +8,14 @@ UI_PATH := src/ui
 DATA_FILE := "\"~/.cbftp/data\""
 
 UNAME_S := $(shell uname -s)
+# test for different os-release values
+# https://www.freedesktop.org/software/systemd/man/latest/os-release.html#:~:text=Example%C2%A03.%C2%A0Reading%20os%2Drelease%20in%20sh(1)
+ifneq ($(wildcard /etc/os-release),)
+OS_RELEASE := /etc/os-release
+else ifneq ($(wildcard /usr/lib/os-release),)
+OS_RELEASE := /usr/lib/os-release
+endif
+
 ifneq ($(STATIC_SSL_PATH),)
 STATIC_SSL_INCLUDE := -I$(STATIC_SSL_PATH)/include
 STATIC_SSL_LINK := $(STATIC_SSL_PATH)/libssl.a $(STATIC_SSL_PATH)/libcrypto.a
@@ -61,7 +69,22 @@ ifndef LINKFLAGS
   ifneq ($(filter $(UNAME_S),FreeBSD),)
     FREEBSD=1
   endif
-  ifneq ($(DEBIAN)$(FREEBSD),)
+  ifdef OS_RELEASE
+    # Debian-based distributions like to store their ID variable without quotes while Fedora/RHEL will store with
+    OS_RELEASE_ID := $(patsubst ID="%",%,$(filter ID=%,$(shell cat $(OS_RELEASE))))
+    # ID_LIKE contains spaces, which filter doesnt take too kindly to.
+    OS_RELEASE_ID_LIKE := $(subst $\",,$(patsubst ID_LIKE=%,%,$(filter ID_LIKE=%,$(shell cat $(OS_RELEASE)))))
+    ifeq ($(OS_RELEASE_ID),rhel)
+      REDHAT=1
+    else ifeq ($(OS_RELEASE_ID),fedora)
+      FEDORA=1
+    else ifeq ($(OS_RELEASE_ID_LIKE),rhel)
+      REDHAT=1
+    else ifeq ($(OS_RELEASE_ID_LIKE),fedora)
+      FEDORA=1
+    endif
+  endif
+  ifneq ($(DEBIAN)$(FREEBSD)$(REDHAT)$(FEDORA),)
     LINKFLAGS+=-lncursesw
   else
     LINKFLAGS+=-lncurses
@@ -69,3 +92,4 @@ ifndef LINKFLAGS
 else
   $(info Using LINKFLAGS provided by shell)
 endif
+
